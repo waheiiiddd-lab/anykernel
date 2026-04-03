@@ -15,7 +15,6 @@ _______|__|__  __|__| ____   ____
  • Android Base    : android12-5.10 (GKI)
  • Build Tool      : Clang dynamic
  • Support         : SusFS
- • susfs           : 2.0.0
  • Developer       : @zenixoooooo
 
        Ready to INSTALL KERNEL
