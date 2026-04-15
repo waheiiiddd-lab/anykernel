@@ -13,8 +13,8 @@ _______|__|__  __|__| ____   ____
 
  • Kernel Version  : 5.10
  • Android Base    : android12-5.10 (GKI)
- • Build Tool      : Clang dynamic
- • Support         : SusFS
+ • Build Tool      : Clang cirrus
+ • Support         : SusFS 2.1.0
  • Developer       : @zenixoooooo
 
        Ready to INSTALL KERNEL
