@@ -35,9 +35,8 @@ if [ -d $ramdisk/fstab* ]; then
   sed -i "s/wait,avb/wait/g" $ramdisk/fstab*;
 fi
 
-# [PENTING] Memaksa SELinux Permissive jika kernel di-build sebagai Permissive
-# Ini mencegah hang pada layanan sistem Advan (hwservicemanager)
-append_cmdline "androidboot.selinux=permissive";
+# Sebagai gantinya, biarkan default atau gunakan Enforcing
+append_cmdline "androidboot.selinux=enforcing";
 append_cmdline "patch_vbmeta_flag=1";
 
 write_boot;
