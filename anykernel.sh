@@ -35,9 +35,14 @@ if [ -d $ramdisk/fstab* ]; then
   sed -i "s/wait,avb/wait/g" $ramdisk/fstab*;
 fi
 
-# Sebagai gantinya, biarkan default atau gunakan Enforcing
+# Di dalam anykernel.sh
+# Memaksa flag verifikasi tetap '0' agar bootloader tidak melapor ke Android bahwa sistem 'Corrupted'
+ui_print "- Spoofing VBMeta flags..."
+patch_vbmeta_flag=1; 
+
+# Jangan pakai permissive! Pakai enforcing agar bank aman.
 append_cmdline "androidboot.selinux=enforcing";
-append_cmdline "patch_vbmeta_flag=1";
+append_cmdline "androidboot.veritymode=enforcing";
 
 write_boot;
 ## end install
