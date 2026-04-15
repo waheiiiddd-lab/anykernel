@@ -1,54 +1,44 @@
-### AnyKernel3 Ramdisk Mod Script
-## osm0sis @ xda-developers
+# AnyKernel3 Ramdisk Mod Script
+# By zixine
 
-### AnyKernel setup
-# Global properties
+## AnyKernel setup
+# set up layouts and directories
 properties() { '
-kernel.string=GKI 5.10 elysium
+kernel.string=zixine-elysium-universal by @waheiiiddd-lab
 do.devicecheck=0
 do.modules=0
 do.systemless=1
 do.cleanup=1
 do.cleanuponabort=0
-device.name1=
-device.name2=
-supported.versions=
-supported.patchlevels=
-supported.vendorpatchlevels=
-'; } # end properties
+'; }
 
-### AnyKernel install
+# shell variables
+block=/dev/block/by-name/boot;
+is_slot_device=auto;
+ramdisk_compression=auto;
+patch_vbmeta_flag=auto;
 
-## Boot shell variables
-block=boot
-is_slot_device=1
-ramdisk_compression=auto
-patch_vbmeta_flag=auto
+## AnyKernel methods (DO NOT CHANGE)
+# import patching functions/variables
+. tools/ak3-core.sh;
 
-# Import functions/variables and setup patching - see for reference (DO NOT REMOVE)
-. tools/ak3-core.sh
+## AnyKernel install
+dump_boot;
 
-ui_print " "
-ui_print "- Checking kernel version..."
-
-current_kernel=$(uname -r | sed -E 's/^([0-9]+\.[0-9]+).*/\1/') 
-new_kernel=$(strings "${AKHOME}"/Image 2>/dev/null | grep -E -m1 'Linux version.*#' | awk '{print $3}')
-
-if [[ $current_kernel == "5.10" ]]; then
-    ui_print "- Compatible: $current_kernel"
-else
-    ui_print "- Incompatible: $current_kernel"
-    exit 1
+# [PENTING] Menghapus Verifikasi AVB/DM-Verity dari fstab ramdisk
+# Ini mencegah pesan "Your device is corrupted" pada Advan/Itel
+if [ -d $ramdisk/fstab* ]; then
+  ui_print "- Patching fstab to disable DM-Verity..."
+  sed -i "s/,avb_pubkey=.*//g" $ramdisk/fstab*;
+  sed -i "s/,avb=.*//g" $ramdisk/fstab*;
+  sed -i "s/,verify//g" $ramdisk/fstab*;
+  sed -i "s/wait,avb/wait/g" $ramdisk/fstab*;
 fi
 
-ui_print " "
+# [PENTING] Memaksa SELinux Permissive jika kernel di-build sebagai Permissive
+# Ini mencegah hang pada layanan sistem Advan (hwservicemanager)
+append_cmdline "androidboot.selinux=permissive";
+append_cmdline "patch_vbmeta_flag=1";
 
-## Start boot install
-
-split_boot # Use split_boot to skip ramdisk unpack, e.g., for devices with init_boot ramdisk
-
-ui_print "- $(strings "${home}"/Image 2>/dev/null | grep -E -m1 'Linux version.*#' | awk '{print $3}')"
-
-flash_boot # Use flash_boot to skip ramdisk repack, e.g., for devices with init_boot ramdisk
-
-## End boot install
+write_boot;
+## end install
