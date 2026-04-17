@@ -3,6 +3,16 @@
 
 ## AnyKernel setup
 # set up layouts and directories
+### AnyKernel install
+
+# boot shell variables
+BLOCK=boot;
+IS_SLOT_DEVICE=auto;
+RAMDISK_COMPRESSION=auto;
+PATCH_VBMETA_FLAG=auto;
+NO_BLOCK_DISPLAY=1;
+NO_MAGISK_CHECK=1;
+
 properties() { '
 kernel.string=zixine-elysium-universal by @waheiiiddd-lab
 do.devicecheck=0
@@ -11,12 +21,6 @@ do.systemless=1
 do.cleanup=1
 do.cleanuponabort=0
 '; }
-
-# shell variables
-block=/dev/block/by-name/boot;
-is_slot_device=auto;
-ramdisk_compression=auto;
-patch_vbmeta_flag=auto;
 
 ## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables
