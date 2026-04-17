@@ -25,16 +25,6 @@ patch_vbmeta_flag=auto;
 ## AnyKernel install
 dump_boot;
 
-# [PENTING] Menghapus Verifikasi AVB/DM-Verity dari fstab ramdisk
-# Ini mencegah pesan "Your device is corrupted" pada Advan/Itel
-if [ -d $ramdisk/fstab* ]; then
-  ui_print "- Patching fstab to disable DM-Verity..."
-  sed -i "s/,avb_pubkey=.*//g" $ramdisk/fstab*;
-  sed -i "s/,avb=.*//g" $ramdisk/fstab*;
-  sed -i "s/,verify//g" $ramdisk/fstab*;
-  sed -i "s/wait,avb/wait/g" $ramdisk/fstab*;
-fi
-
 # Di dalam anykernel.sh
 # Memaksa flag verifikasi tetap '0' agar bootloader tidak melapor ke Android bahwa sistem 'Corrupted'
 ui_print "- Spoofing VBMeta flags..."
